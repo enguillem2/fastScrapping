@@ -14,7 +14,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def read_root():
     return {"Hello": "World"}
 
-@app.put("/scrape")
+@app.post("/scrape")
 async def scrape_url(request: ScrapeRequest):
     # Lógica para realizar scraping
     data = do_scraping(request.url)
