@@ -8,5 +8,5 @@ res = requests.get(url,headers=h)
 print(res.reason)
 print(res.cookies)
 
-with open("codigo_200.html","w",encoding="utf-8") as f:
+with open("static/codigo_200.html","w",encoding="utf-8") as f:
     f.write(res.text)
