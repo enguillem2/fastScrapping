@@ -5,7 +5,7 @@ from scraping import do_scraping
 
 app = FastAPI()
 
-# Montar el directorio de archivos estáticos
+# Montar el directorio de archivos estáticos, testing
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
