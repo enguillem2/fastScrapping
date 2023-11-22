@@ -56,3 +56,4 @@ uvicorn==0.24.0.post1
 wcwidth==0.2.12
 webdrivermanager==0.10.0
 wsproto==1.2.0
+#pip freeze > requirements.txt
