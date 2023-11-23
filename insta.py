@@ -42,23 +42,23 @@ def login_instagram():
     password=wait.until(ec.visibility_of_element_located((By.NAME,"password")))
 
        
-    # name.send_keys(USER_IG)
-    # password.send_keys(PASS_IG)
+    name.send_keys(USER_IG)
+    password.send_keys(PASS_IG)
 
-    # try:
-    #     submit=wait.until(ec.element_to_be_clickable((By.CSS_SELECTOR,"button[type='submit']")))
-    #     submit.click()
+    try:
+        submit=wait.until(ec.element_to_be_clickable((By.CSS_SELECTOR,"button[type='submit']")))
+        submit.click()
 
-    #     elemento=wait.until(ec.element_to_be_clickable((By.XPATH,"//button[text()='Save Info']")))
-    #     elemento.click()
-    #     elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article[role='presentation']")))
-    #     print('Login desde cero: ok')
-    # except TimeoutException:
-    #     print("feed de noticias no cargado")
-    #     # return "error"
-    # #guardam cookies amb pickle
-    # cookies = driver.get_cookies()
-    # pickle.dump(cookies,open("instagram.cookies","wb"))
+        elemento=wait.until(ec.element_to_be_clickable((By.XPATH,"//button[text()='Save Info']")))
+        elemento.click()
+        elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article[role='presentation']")))
+        print('Login desde cero: ok')
+    except TimeoutException:
+        print("feed de noticias no cargado")
+        return "error"
+    # guardam cookies amb pickle
+    cookies = driver.get_cookies()
+    pickle.dump(cookies,open("instagram.cookies","wb"))
     print("cookies guardadas")
 
 
