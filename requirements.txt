@@ -34,6 +34,7 @@ pydantic_core==2.14.3
 Pygments==2.17.1
 PySocks==1.7.1
 python-dateutil==2.8.2
+python-decouple==3.8
 python-dotenv==1.0.0
 pyzmq==25.1.1
 requests==2.31.0
@@ -53,5 +54,4 @@ urllib3==2.1.0
 uvicorn==0.24.0.post1
 wcwidth==0.2.11
 webdriver-manager==4.0.1
-wget==3.2
 wsproto==1.2.0
