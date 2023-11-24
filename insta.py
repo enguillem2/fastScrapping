@@ -25,8 +25,10 @@ def login_instagram():
             driver.add_cookie(cookie)
         driver.get("https://instagram.com")
         try:
-            elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article[role='presentation']")))
             print('Login por cookies: ok')
+            # elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article[role='presentation']")))
+            boton=wait.until(ec.element_to_be_clickable((By.XPATH,"//button[contains(text(),'Permitir todas las cookies')]")))
+            boton.click()
             return "ok"
         except TimeoutException:
             print("NO LOGIN COOKIES TIME")
