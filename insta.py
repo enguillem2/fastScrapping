@@ -12,6 +12,7 @@ from decouple import config
 from pathlib import Path
 
 import pickle #para guardar cookies
+import time
 url="https://instagram.com"
 
 USER_IG = config("USER_IG")
@@ -36,7 +37,7 @@ def login_insta():
 
     try:
         log=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[contains(text(),'Entrar')]")))
-        input("wait")
+        time.sleep(2)
         log.click()
     except TimeoutException:
         print("error click")
