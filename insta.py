@@ -12,9 +12,14 @@ from decouple import config
 from pathlib import Path
 
 import pickle #para guardar cookies
+url="https://instagram.com"
 
 USER_IG = config("USER_IG")
 PASS_IG = config("PASS_IG")
+
+def login_insta():
+    print("login en insta")
+    driver.get(url)
 
 def login_instagram():
     if os.path.isfile("instagram.cookies"):
@@ -69,7 +74,7 @@ if __name__ == "__main__":
 
     driver=iniciar_chrome(headless=False)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
-    res = login_instagram()
+    res = login_insta()
 
     input("pres enter")
 
