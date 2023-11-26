@@ -71,16 +71,22 @@ def crucial():
         try:
             titol=element.find_element(By.CSS_SELECTOR,"a.Title__title__z5HRm")
             # titol=items.find_element(By.CSS_SELECTOR,"a.Title__title__z5HRm Title__fixed__bJ2c2")
-            print("titol: ",titol.text)
+            print("titol:",titol.text)
             price=element.find_element(By.CSS_SELECTOR,"span.Price__price__LKpWT").get_attribute("aria-label")
-            print("price: ",price)
+            price=price.replace(u'\xa0', u' ').split(" ")[0].replace(',',".")
+            price=float(price)
+            print("price:",price)
             try:
                 price_orig=element.find_element(By.CSS_SELECTOR,"span.Price__small__Y4NDm").get_attribute("aria-label")
+                price_orig=float(price_orig.replace(u'\xa0', u' ').split(" ")[0].replace(',',"."))
             except:
-                price_orig=None
-            print("price_orig: ",price_orig)
-        except :
-            print("error!!!")
+                price_orig=0
+            print("price_orig:",price_orig)
+            if price_orig!=0:
+                percent=100*price/price_orig
+                print(f"percent {percent}%")
+        except Exception as e :
+            print("error!!!",e)
 
 
 
