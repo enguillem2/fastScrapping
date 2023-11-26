@@ -20,31 +20,49 @@ PASS_IG = config("PASS_IG")
 
 def login_insta():
     print("login en insta")
-    driver.get(url)
-    elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Permitir todas')]")))
-    elemento.click()
+    if os.path.isfile("instagram.cookies"):
+        cookies = pickle.load(open("instagram.cookies","rb"))
+        driver.get("https://instagram.com/robots.txt")
+        for cookie in cookies:
+            driver.add_cookie(cookie)
+        driver.get("https://instagram.com")
+        try:
+            print('Login por cookies: ok')
+            elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article")))
+            return "ok"
+        except TimeoutException:
+            print("NO LOGIN COOKIES TIME")
 
-    try:
-        username=wait.until(ec.visibility_of_element_located((By.NAME,"username")))
-        password=wait.until(ec.visibility_of_element_located((By.NAME,"password")))
-        username.send_keys(USER_IG)
-        password.send_keys(PASS_IG)
-
-    except TimeoutException:
-        print('erro no user name')
-        return "error"
-
-
-    try:
-        log=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[contains(text(),'Entrar')]")))
-        time.sleep(2)
-        log.click()
-
-        elemento = wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Guardar información')]")))
+        return "ok"
+    else:
+        driver.get(url)
+        elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Permitir todas')]")))
         elemento.click()
-    except TimeoutException:
-        print("error click")
-        return "error"
+
+        try:
+            username=wait.until(ec.visibility_of_element_located((By.NAME,"username")))
+            password=wait.until(ec.visibility_of_element_located((By.NAME,"password")))
+            username.send_keys(USER_IG)
+            password.send_keys(PASS_IG)
+
+        except TimeoutException:
+            print('erro no user name')
+            return "error"
+
+
+        try:
+            log=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[contains(text(),'Entrar')]")))
+            time.sleep(2)
+            log.click()
+
+            elemento = wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Guardar información')]")))
+            elemento.click()
+        except TimeoutException:
+            print("error click")
+            return "error"
+    cookies = driver.get_cookies()
+    pickle.dump(cookies,open("instagram.cookies","wb"))
+    print("cookies guardadas")
 
 
 
