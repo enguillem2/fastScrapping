@@ -4,7 +4,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys #per pulsar tecles
 from selenium.webdriver.common.by import By
 
-from libs import iniciar_chrome
+from libs import *
 import os
 import wget
 from decouple import config
@@ -20,46 +20,53 @@ PASS_IG = config("PASS_IG")
 
 def login_insta():
     print("login en insta")
+    raya()
     if os.path.isfile("instagram.cookies"):
+        print('Login por cookies')
         cookies = pickle.load(open("instagram.cookies","rb"))
         driver.get("https://instagram.com/robots.txt")
         for cookie in cookies:
             driver.add_cookie(cookie)
-        driver.get("https://instagram.com")
+        driver.get(url)
         try:
+            cursor_arriba()
             print('Login por cookies: ok')
             elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article")))
             return "ok"
         except TimeoutException:
             print("NO LOGIN COOKIES TIME")
+            return "noOk"
 
         return "ok"
-    else:
-        driver.get(url)
-        elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Permitir todas')]")))
+    
+    #no cookies
+    driver.get(url)
+    elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Permitir todas')]")))
+    elemento.click()
+
+    try:
+        username=wait.until(ec.visibility_of_element_located((By.NAME,"username")))
+        password=wait.until(ec.visibility_of_element_located((By.NAME,"password")))
+        username.send_keys(USER_IG)
+        password.send_keys(PASS_IG)
+
+    except TimeoutException:
+        print('erro no user name')
+        return "error"
+
+
+    try:
+        log=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[contains(text(),'Entrar')]")))
+        time.sleep(2)
+        log.click()
+
+        elemento = wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Guardar información')]")))
         elemento.click()
-
-        try:
-            username=wait.until(ec.visibility_of_element_located((By.NAME,"username")))
-            password=wait.until(ec.visibility_of_element_located((By.NAME,"password")))
-            username.send_keys(USER_IG)
-            password.send_keys(PASS_IG)
-
-        except TimeoutException:
-            print('erro no user name')
-            return "error"
-
-
-        try:
-            log=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[contains(text(),'Entrar')]")))
-            time.sleep(2)
-            log.click()
-
-            elemento = wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Guardar información')]")))
-            elemento.click()
-        except TimeoutException:
-            print("error click")
-            return "error"
+        elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"article")))
+    except TimeoutException:
+        print("error click")
+        return "error"
+    
     cookies = driver.get_cookies()
     pickle.dump(cookies,open("instagram.cookies","wb"))
     print("cookies guardadas")
@@ -120,11 +127,9 @@ def login_instagram():
 
 
 if __name__ == "__main__":
-
     driver=iniciar_chrome(headless=False,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     res = login_insta()
-
     input("pres enter")
     driver.quit()
 
