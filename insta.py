@@ -21,7 +21,7 @@ PASS_IG = config("PASS_IG")
 def login_insta():
     print("login en insta")
     driver.get(url)
-    elemento=driver.find_element(By.XPATH,"//button[contains(text(),'Permitir todas')]")
+    elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Permitir todas')]")))
     elemento.click()
 
     try:
@@ -39,6 +39,9 @@ def login_insta():
         log=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[contains(text(),'Entrar')]")))
         time.sleep(2)
         log.click()
+
+        elemento = wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Guardar información')]")))
+        elemento.click()
     except TimeoutException:
         print("error click")
         return "error"
