@@ -60,8 +60,7 @@ def login():
 
 
 
-def crucial():
-    url="https://amzn.to/3GhT2kz"
+def preus(url):
     driver.get(url)
     time.sleep(4)
     # driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
@@ -95,6 +94,17 @@ if __name__ == "__main__":
     driver=iniciar_chrome(headless=False,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     login()
-    crucial()
+
+    #sandisk
+    preus("https://amzn.to/3RfmQ7z")
+
+    #crucioal
+    # url="https://amzn.to/3GhT2kz"
+    preus("https://amzn.to/3GhT2kz")
+
+    #test
+    preus("https://www.amazon.es/stores/page/806A81D6-F27A-4402-A796-7FDACB52EDCD?ingress=0&visitId=d0afec7c-c114-4b6a-9705-dbd2d62f7c6f&lp_slot=auto-sparkle-hsa-tetris&store_ref=SB_A0933048PLB1IQ3HYI71&ref_=sbx_be_s_sparkle_lsi4d_cta")
+
+
     input("pres enter")
     driver.quit()
