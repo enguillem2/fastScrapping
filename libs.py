@@ -3,6 +3,16 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+import os
+
+def cursor_arriba(n=1):
+    print(f'\033[{n}A',end="")
+
+def borrar_linea():
+    print("\33[k")
+
+def raya():
+    print("-"*os.get_terminal_size().columns)
 
 def iniciar_chrome(headless=True,height=1080,width=970,px=0,py=0):
     ruta = ChromeDriverManager().install()
