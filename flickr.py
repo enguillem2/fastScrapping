@@ -17,14 +17,20 @@ import time
 import wget
 url="https://flickr.com"
 
-USER_IG = config("USER_IG")
-PASS_FLK = config("PASS_IG")
+USER_FLK = config("USER_FLK")
+PASS_FLK = config("PASS_FLK")
 
 def login():
     #no cookies
     driver.get(url)
-    # elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//button[contains(text(),'Permitir todas')]")))
+    # elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"a.acceptAll")))
     # elemento.click()
+    # elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//a[contains(text(),'Aceptar Todo')]")))
+    # elemento.click()
+    time.sleep(10)
+    elemento=driver.find_element(By.CLASS_NAME,"acceptAll")
+    elemento.click()
+
 def descargar_fotos(hashtag,max):
     pass
 
