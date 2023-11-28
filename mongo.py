@@ -3,6 +3,9 @@ client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["customersdb"]
 customers = db["customers"]
 
+amazon = client["amazondb"]
+amz_products=amazon["products"]
+
 customers_list = [
   { "name": "Amy", "address": "Apple st 652"},
   { "name": "Hannah", "address": "Mountain 21"},
@@ -20,3 +23,6 @@ customers_list = [
 x = customers.insert_many(customers_list)
 # print list of the _id values of the inserted documents:
 print(x.inserted_ids)
+
+def insert_many_products(products_list):
+    x = amz_products.insert_many(products_list)
