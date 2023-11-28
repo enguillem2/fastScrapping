@@ -14,6 +14,7 @@ from pathlib import Path
 
 import pickle #para guardar cookies
 import time
+import wget
 url="https://instagram.com"
 
 USER_IG = config("USER_IG")
@@ -26,10 +27,26 @@ def descargar_fotos_instagram(hashtag,minimo):
     driver.get(url)
     elemento=driver.find_element(By.CSS_SELECTOR,"html")
     #scroll
-    for n in range(20):
+    time.sleep(5)
+    url_fotos=set()
+    for n in range(3):
         print("pagedown")
-        time.sleep(1)
-        elemento.send_keys(Keys.PAGE_DOWN)
+        time.sleep(0.5)
+        driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+
+    fotos=driver.find_elements(By.CSS_SELECTOR,"div._aabd")
+    for foto in fotos:
+        img=foto.find_element(By.CSS_SELECTOR,"img")
+        url_fotos.add(img.get_attribute('src'))
+    
+    path_dst=f"pictures/{hashtag}"
+    if len(fotos)>0 and not os.path.exists(path_dst):
+        os.mkdir(path_dst)
+
+    for url_foto in url_fotos:
+        wget.download(url_foto,path_dst)
+
+
 
 def login_insta():
     print("login en insta")
