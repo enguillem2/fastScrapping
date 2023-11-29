@@ -101,7 +101,7 @@ def preus(url):
 
 
 if __name__ == "__main__":
-    driver=iniciar_chrome(headless=False,px=3000)
+    driver=iniciar_chrome(headless=True,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     login()
 
