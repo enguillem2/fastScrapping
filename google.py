@@ -15,24 +15,24 @@ from pathlib import Path
 import pickle #para guardar cookies
 import time
 import wget
-url="https://flickr.com"
+url="https://google.com"
 
-USER_FLK = config("USER_FLK")
-PASS_FLK = config("PASS_FLK")
+
 
 def login():
     #no cookies
     driver.get(url)
     # elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"a.acceptAll")))
     # elemento.click()
-    # elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//a[contains(text(),'Aceptar Todo')]")))
-    # elemento.click()
-    time.sleep(10)
-    elemento=driver.find_element(By.CLASS_NAME,"acceptAll")
+    elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[text()='Aceptar todo']")))
+    print("elemento ",elemento)
     elemento.click()
+    # elemento=driver.find_element(By.CLASS_NAME,"acceptAll")
+    # elemento.click()
 
-def descargar_fotos(hashtag,max):
-    pass
+def search(hashtag):
+    url=f"https://www.google.com/search?q={hashtag}"
+    driver.get(url)
 
 
 if __name__ == "__main__":
@@ -53,6 +53,6 @@ if __name__ == "__main__":
     driver=iniciar_chrome(headless=False,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     res = login()
-    res = descargar_fotos(HASHTAG,MINIMO)
+    res = search(HASHTAG)
     input("pres enter")
     driver.quit()

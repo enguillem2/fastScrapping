@@ -7,6 +7,9 @@ import time
 from decouple import config
 import pickle #para guardar cookies
 
+#mongo
+from mongo import *
+
 
 
 
@@ -61,37 +64,44 @@ def login():
 
 
 def preus(url):
+    products=[]
     driver.get(url)
     time.sleep(4)
     # driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
     elements=driver.find_elements(By.CSS_SELECTOR,"div.ProductGridItem__item__IkSDt")
     print("elements: ",elements)
     for element in elements:
+        product={}
         try:
             titol=element.find_element(By.CSS_SELECTOR,"a.Title__title__z5HRm")
             # titol=items.find_element(By.CSS_SELECTOR,"a.Title__title__z5HRm Title__fixed__bJ2c2")
-            print("titol:",titol.text)
+            product["description"]=titol.text
             price=element.find_element(By.CSS_SELECTOR,"span.Price__price__LKpWT").get_attribute("aria-label")
             price=price.replace(u'\xa0', u' ').split(" ")[0].replace(',',".")
             price=float(price)
-            print("price:",price)
+            product["price"]=price
             try:
                 price_orig=element.find_element(By.CSS_SELECTOR,"span.Price__small__Y4NDm").get_attribute("aria-label")
                 price_orig=float(price_orig.replace(u'\xa0', u' ').split(" ")[0].replace(',',"."))
             except:
                 price_orig=0
-            print("price_orig:",price_orig)
+            product["price_orig"]=price_orig
+            percent=0
             if price_orig!=0:
                 percent=100*price/price_orig
                 print(f"percent {percent}%")
+            product["percent"]=percent
+            products.append(product)
+            print(f"{product}")
         except Exception as e :
             print("error!!!",e)
+    insert_many_products(products)
 
 
 
 
 if __name__ == "__main__":
-    driver=iniciar_chrome(headless=False,px=3000)
+    driver=iniciar_chrome(headless=True,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     login()
 
