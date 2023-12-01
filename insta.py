@@ -53,9 +53,9 @@ def descargar_fotos_user(hashtag):
     #scroll
     time.sleep(5)
     url_fotos=set()
-    for n in range(10):
+    for n in range(25):
         print("pagedown")
-        time.sleep(0.5)
+        time.sleep(1)
         driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
 
     fotos=driver.find_elements(By.CSS_SELECTOR,"div._aabd")
