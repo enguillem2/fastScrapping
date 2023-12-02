@@ -27,9 +27,21 @@ def login():
     # elemento.click()
     # elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//a[contains(text(),'Aceptar Todo')]")))
     # elemento.click()
-    time.sleep(10)
-    elemento=driver.find_element(By.CLASS_NAME,"acceptAll")
-    elemento.click()
+    time.sleep(2)
+    
+    iframe=driver.find_element(By.TAG_NAME("iframe"))
+    print(f"iframe: {iframe}")
+
+    elemento=driver.find_element(By.CSS_SELECTOR,"body")
+    links=elemento.find_elements(By.CSS_SELECTOR,"a")
+    i=0
+    for l in links:
+        i+=1
+        print(i,l.text)
+        if l.text=="Iniciar sesión":
+            break
+    # elemento.click()
+
 
 def descargar_fotos(hashtag,max):
     pass
