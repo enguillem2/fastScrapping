@@ -22,15 +22,24 @@ PASS_FLK = config("PASS_FLK")
 
 def login():
     
+    url="https://flickr.com"
+    url="https://identity.flickr.com/login?redir=https%3A%2F%2Fflickr.com%2F"
     if os.path.isfile("flickr.cookies"):
-        url="https://flickr.com"
         print('Login por cookies')
         cookies = pickle.load(open("flickr.cookies","rb"))
-        driver.get("https://identity.flickr.com/login?redir=https%3A%2F%2Fflickr.com%2F")
-        for cookie in cookies:
-            print("cokie",cookie)
-            driver.add_cookie(cookie)
         driver.get(url)
+        for cookie in cookies:
+            if cookie["domain"]=="identity.flickr.com":
+                print("cokie",cookie)
+                driver.add_cookie(cookie)
+
+        driver.get("https://flickr.com/robots.txt")
+        for cookie in cookies:
+            if cookie["domain"]==".flickr.com":
+                print("cokie",cookie)
+                driver.add_cookie(cookie)
+        
+        driver.get("https://flickr.com")
         try:
             cursor_arriba()
             print('Login por cookies: ok')
@@ -89,7 +98,33 @@ def login():
 
 
 def descargar_fotos(hashtag,max):
-    pass
+    url=f'https://www.flickr.com/search/?text={hashtag}'
+    driver.get(url)
+    input("ait")
+    hrefs=[]
+    urls_fotos=[]
+    elementos=driver.find_elements(By.CSS_SELECTOR,"a.overlay")
+    for link in elementos:
+        hrefs.append(link.get_attribute("href"))
+        
+    print(hrefs)
+        
+    for href in hrefs:
+        driver.get(href)
+        time.sleep(2)
+        picture=driver.find_element(By.CSS_SELECTOR,"div.photo-well-media-scrappy-view")
+        picture=picture.find_element(By.TAG_NAME,"img")
+        urls_fotos.append(picture.get_attribute("src"))
+    input("ait")
+    print(urls_fotos)
+    path_dst=f"pictures/flickr/{hashtag}"
+    if len(urls_fotos)>0 and not os.path.exists(path_dst):
+        os.mkdir(path_dst)
+
+    for url_foto in urls_fotos:
+        wget.download(url_foto,path_dst)
+    
+
 
 
 if __name__ == "__main__":
@@ -109,7 +144,7 @@ if __name__ == "__main__":
     print(f'HASHTAG: {HASHTAG} MINIMO: {MINIMO}')
     driver=iniciar_chrome(headless=False,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
-    res = login()
+    # res = login()
     res = descargar_fotos(HASHTAG,MINIMO)
     input("pres enter")
     driver.quit()
