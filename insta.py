@@ -46,6 +46,30 @@ def descargar_fotos_instagram(hashtag,minimo):
     for url_foto in url_fotos:
         wget.download(url_foto,path_dst)
 
+def descargar_fotos_user(hashtag):
+    url=f"https://www.instagram.com/{hashtag}"
+    driver.get(url)
+    elemento=driver.find_element(By.CSS_SELECTOR,"html")
+    #scroll
+    time.sleep(5)
+    url_fotos=set()
+    for n in range(25):
+        print("pagedown")
+        time.sleep(1)
+        driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+
+    fotos=driver.find_elements(By.CSS_SELECTOR,"div._aabd")
+    for foto in fotos:
+        img=foto.find_element(By.CSS_SELECTOR,"img")
+        url_fotos.add(img.get_attribute('src'))
+    
+    path_dst=f"pictures/{hashtag}"
+    if len(fotos)>0 and not os.path.exists(path_dst):
+        os.mkdir(path_dst)
+
+    for url_foto in url_fotos:
+        wget.download(url_foto,path_dst)
+
 
 
 def login_insta():
@@ -124,7 +148,9 @@ if __name__ == "__main__":
     driver=iniciar_chrome(headless=False,px=3000)
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     res = login_insta()
-    res = descargar_fotos_instagram(HASHTAG,MINIMO)
+    # res = descargar_fotos_instagram(HASHTAG,MINIMO)
+    res = descargar_fotos_user(HASHTAG)
+
     input("pres enter")
     driver.quit()
 
