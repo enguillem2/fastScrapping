@@ -9,8 +9,6 @@ click==8.1.7
 comm==0.2.0
 debugpy==1.8.0
 decorator==5.1.1
-dnspython==2.4.2
-exceptiongroup==1.2.0
 executing==2.0.1
 fastapi==0.104.1
 h11==0.14.0
@@ -34,7 +32,6 @@ pure-eval==0.2.2
 pydantic==2.5.1
 pydantic_core==2.14.3
 Pygments==2.17.1
-pymongo==4.6.0
 PySocks==1.7.1
 python-dateutil==2.8.2
 python-decouple==3.8
@@ -53,9 +50,11 @@ traitlets==5.13.0
 trio==0.23.1
 trio-websocket==0.11.1
 typing_extensions==4.8.0
+undetected-chromedriver==3.5.4
 urllib3==2.1.0
 uvicorn==0.24.0.post1
 wcwidth==0.2.11
 webdriver-manager==4.0.1
+websockets==12.0
 wget==3.2
 wsproto==1.2.0

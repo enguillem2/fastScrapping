@@ -4,6 +4,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys #per pulsar tecles
 from selenium.webdriver.common.by import By
 
+from iniciar_webdriver_uc import iniciar_webdriver
+
 from libs import *
 import os
 import sys
@@ -17,15 +19,20 @@ import time
 import wget
 url="https://google.com"
 
-
+USER_GLG = config("USER_GLG")
+PASS_GLG= config("PASS_GLG")
 
 def login():
     #no cookies
+    url="https://accounts.google.com"
     driver.get(url)
     # elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"a.acceptAll")))
     # elemento.click()
-    elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[text()='Aceptar todo']")))
+    elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"input[type='email']")))
+    elemento.send_keys(USER_GLG)
+    elemento.send_keys(Keys.ENTER)
     print("elemento ",elemento)
+    input("wait")
     elemento.click()
     # elemento=driver.find_element(By.CLASS_NAME,"acceptAll")
     # elemento.click()
@@ -50,9 +57,9 @@ if __name__ == "__main__":
 
     HASHTAG = sys.argv[1].strip("#")
     print(f'HASHTAG: {HASHTAG} MINIMO: {MINIMO}')
-    driver=iniciar_chrome(headless=False,px=3000)
+    driver=iniciar_webdriver(headless=False,pos="right")
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     res = login()
-    res = search(HASHTAG)
+    # res = search(HASHTAG)
     input("pres enter")
     driver.quit()
