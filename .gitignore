@@ -4,3 +4,4 @@ venv
 .env
 *.cookies
 pictures
+*html
