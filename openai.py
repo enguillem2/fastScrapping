@@ -124,11 +124,45 @@ class ChatGPT:
         elemento=self.driver.find_element(By.CSS_SELECTOR,"textarea[tabindex='0']")
         elemento.send_keys(prompt)
         elemento.send_keys(Keys.ENTER)
+        respuesta=""
+        time.sleep(3)
+        inicio= time.time()
+        generating=True
+        while generating:
+            try:
+                buttons=self.driver.find_elements(By.CSS_SELECTOR,"button.rounded-full")
+                generating=False
+                for b in buttons:
+                    label=b.get_attribute('aria-label')
+                    if label=="Stop generating":
+                        generating=True
+                    
+            except:
+                if respuesta:
+                    break
+            e = self.driver.find_elements(By.CSS_SELECTOR,"div.markdown")[-1]
+            respuesta=e.text
+            segundos=int(time.time()-inicio)
+            if segundos:
+                print(f'\33[K{azul}generando respuesta... {gris}{segundos} segundos ({len(respuesta)})')
+                time.sleep(1)
+                cursor_arriba()
+                borrar_linea()
+        print(respuesta)
+
+                
+
         
 
 if __name__ == "__main__":
     OPENAI_USER = config("OPENAI_USER")
     OPENAI_PASS= config("OPENAI_PASS")
     chat=ChatGPT(OPENAI_USER,OPENAI_PASS)
-    chat.chatear("Que es selenium?")
+    prompt=""
+    prompt=input("pregunta: ")
+    while prompt!="salir":
+        chat.chatear(prompt)
+        prompt=input("pregunta: ")
+        
+
     input("enter")
