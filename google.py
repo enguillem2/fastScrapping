@@ -22,8 +22,38 @@ url="https://google.com"
 USER_GLG = config("USER_GLG")
 PASS_GLG= config("PASS_GLG")
 
+
 def login():
     #no cookies
+    url="https://google.com"
+
+
+    # if os.path.isfile("google.cookies"):
+    #     print('Login por cookies')
+    #     cookies = pickle.load(open("google.cookies","rb"))
+        
+    #     driver.get("https://google.com/robots.txt")
+    #     for cookie in cookies:
+    #         print(cookie)
+    #         driver.add_cookie(cookie)
+    #     driver.get(url)
+    #     try:
+    #         cursor_arriba()
+    #         print('Login por cookies: ok')
+    #         elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"body")))
+    #         return "ok"
+    #     except TimeoutException:
+    #         print("NO LOGIN COOKIES TIME")
+    #         return "noOk"
+
+    #     return "ok"
+
+    driver.get("https://google.com")
+    print("getting google")
+
+    elemento=wait.until(ec.visibility_of_element_located((By.XPATH,"//div[text()='Aceptar todo']")))
+    elemento.click()
+
     url="https://accounts.google.com"
     driver.get(url)
     # elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"a.acceptAll")))
@@ -31,11 +61,20 @@ def login():
     elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"input[type='email']")))
     elemento.send_keys(USER_GLG)
     elemento.send_keys(Keys.ENTER)
-    print("elemento ",elemento)
-    input("wait")
-    elemento.click()
-    # elemento=driver.find_element(By.CLASS_NAME,"acceptAll")
-    # elemento.click()
+
+    elemento=wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,"input[type='password']")))
+    elemento.send_keys(PASS_GLG)
+    elemento.send_keys(Keys.ENTER)
+
+    
+
+    # driver.get("https://google.com")
+    # print("getting google")
+
+    
+    cookies = driver.get_cookies()
+    pickle.dump(cookies,open("google.cookies","wb"))
+    print("cookies guardadas")
 
 def search(hashtag):
     url=f"https://www.google.com/search?q={hashtag}"
