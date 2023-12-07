@@ -36,7 +36,6 @@ class ChatGPT:
             print(f'\33[K{azul}cargando robots.txt... {gris}')
             self.driver.get("https://chat.openai.com/robots.txt")
             for cookie in cookies:
-                print(f'\33[K{azul}cargando cookie: {cookie["name"]}... {gris}')
                 try:
                     self.driver.add_cookie(cookie)
                 except:
@@ -169,6 +168,7 @@ if __name__ == "__main__":
     prompt=input("pregunta: ")
     while prompt!="salir":
         respuesta=chat.chatear(prompt)
-        print(respuesta)
+        print(f'\33[K{amarillo}{respuesta}{gris}')
         prompt=input("pregunta: ")
     chat.cerrar()
+    sys.exit()
