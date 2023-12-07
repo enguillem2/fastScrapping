@@ -144,11 +144,18 @@ class ChatGPT:
             respuesta=e.text
             segundos=int(time.time()-inicio)
             if segundos:
+                cursor_arriba()
                 print(f'\33[K{azul}generando respuesta... {gris}{segundos} segundos ({len(respuesta)})')
                 time.sleep(1)
                 cursor_arriba()
                 borrar_linea()
-        print(respuesta)
+        e = self.driver.find_elements(By.CSS_SELECTOR,"div.markdown")[-1]
+        respuesta=e.text
+        return respuesta
+    
+    def cerrar(self):
+        print(f'\33[K{azul} cerrando... {gris}')
+        self.driver.quit()
 
                 
 
@@ -161,8 +168,7 @@ if __name__ == "__main__":
     prompt=""
     prompt=input("pregunta: ")
     while prompt!="salir":
-        chat.chatear(prompt)
+        respuesta=chat.chatear(prompt)
+        print(respuesta)
         prompt=input("pregunta: ")
-        
-
-    input("enter")
+    chat.cerrar()
