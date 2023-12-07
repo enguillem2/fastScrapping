@@ -16,7 +16,10 @@ from pathlib import Path
 
 import pickle #para guardar cookies
 import time
-import wget
+import tempfile
+
+from openai import ChatGPT
+
 url="https://google.com"
 
 USER_GLG = config("USER_GLG")
@@ -100,5 +103,13 @@ if __name__ == "__main__":
     wait= WebDriverWait(driver,10) #donam 10 segons pq es faci l'acció
     res = login()
     # res = search(HASHTAG)
+
     input("pres enter")
+    driver.get("https://chat.openai.com")
+    input("pres enter")
+    COOKIES_FILE=f'{tempfile.gettempdir()}/openai.cookies'
+
+    pickle.dump(driver.get_cookies(),open(COOKIES_FILE,"wb"))
+
+
     driver.quit()
