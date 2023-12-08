@@ -19,7 +19,7 @@ class ChatGPT:
         self.OPENAI_USER=user   
         self.OPENAI_PASS=password
         self.COOKIES_FILE=f'{tempfile.gettempdir()}/openai.cookies'
-        print(f'{azul}Iniciando webdriver{gris}')
+        print(f'{azul}Iniciando webdriver{negro}')
         self.driver = iniciar_webdriver(headless=False,pos="right")
         self.wait= WebDriverWait(self.driver,30)
         login = self.login_openai()
@@ -31,9 +31,9 @@ class ChatGPT:
 
         #login por cookies
         if os.path.isfile(self.COOKIES_FILE):
-            print(f'\33[K{azul}login por cookies... {gris}')
+            print(f'\33[K{azul}login por cookies... {negro}')
             cookies = pickle.load(open(self.COOKIES_FILE,"rb"))
-            print(f'\33[K{azul}cargando robots.txt... {gris}')
+            print(f'\33[K{azul}cargando robots.txt... {negro}')
             self.driver.get("https://chat.openai.com/robots.txt")
             for cookie in cookies:
                 try:
@@ -43,9 +43,9 @@ class ChatGPT:
             self.driver.get("https://chat.openai.com")
             login=self.comprobar_login()
             if login:
-                print(f'\33[K{azul}LOGIN DESDE cookies: {verde}OK{gris}')
+                print(f'\33[K{azul}LOGIN DESDE cookies: {verde}OK{negro}')
             else:
-                print(f'\33[K{azul}LOGIN DESDE cookies: {rojo}FALLIDO{gris}')
+                print(f'\33[K{azul}LOGIN DESDE cookies: {rojo}FALLIDO{negro}')
             return login
 
 
@@ -55,22 +55,22 @@ class ChatGPT:
 
 
 
-        print(f'\33[K{azul}LOGIN DESDE CERO {gris}')
-        print(f'\33[K{azul}cargando chatGPT... {gris}')
+        print(f'\33[K{azul}LOGIN DESDE CERO {negro}')
+        print(f'\33[K{azul}cargando chatGPT... {negro}')
         self.driver.get("https://chat.openai.com")
         cursor_arriba()
-        print(f'\33[K{azul}click en login... {gris}')
+        print(f'\33[K{azul}click en login... {negro}')
         elemento=self.wait.until(ec.visibility_of_element_located((By.XPATH,"//div[text()='Log in']")))
         elemento.click()
 
         cursor_arriba()
-        print(f'\33[K{azul}introduciendo usuario... {gris}')
+        print(f'\33[K{azul}introduciendo usuario... {negro}')
         elemento=self.wait.until(ec.visibility_of_element_located((By.NAME,"username")))
         elemento.send_keys(self.OPENAI_USER)
         elemento.send_keys(Keys.ENTER)
 
         cursor_arriba()
-        print(f'\33[K{azul}introduciendo password... {gris}')
+        print(f'\33[K{azul}introduciendo password... {negro}')
         elemento=self.wait.until(ec.visibility_of_element_located((By.NAME,"password")))
         elemento.send_keys(self.OPENAI_PASS)
         elemento.send_keys(Keys.ENTER)
@@ -80,9 +80,9 @@ class ChatGPT:
         if login:
             #guardam cookies
             pickle.dump(self.driver.get_cookies(),open(self.COOKIES_FILE,"wb"))
-            print(f'\33[K{azul}LOGIN DESDE ZERO: {verde}OK{gris}')
+            print(f'\33[K{azul}LOGIN DESDE ZERO: {verde}OK{negro}')
         else:
-            print(f'\33[K{azul}LOGIN DESDE ZERO: {rojo}FALLIDO{gris}')
+            print(f'\33[K{azul}LOGIN DESDE ZERO: {rojo}FALLIDO{negro}')
 
             
 
@@ -105,7 +105,7 @@ class ChatGPT:
                 e=self.driver.find_element(By.CSS_SELECTOR,"h3.text-lg")
                 if "session has expired" in e.text:
                     cursor_arriba()
-                    print(f'\33[K{amarillo}LA SESIÓN HA EXPIRADO{gris}')
+                    print(f'\33[K{amarillo}LA SESIÓN HA EXPIRADO{negro}')
                     print()
                     break
             except:
@@ -144,7 +144,7 @@ class ChatGPT:
             segundos=int(time.time()-inicio)
             if segundos:
                 cursor_arriba()
-                print(f'\33[K{azul}generando respuesta... {gris}{segundos} segundos ({len(respuesta)})')
+                print(f'\33[K{azul}generando respuesta... {negro}{segundos} segundos ({len(respuesta)})')
                 time.sleep(1)
                 cursor_arriba()
                 borrar_linea()
@@ -153,7 +153,7 @@ class ChatGPT:
         return respuesta
     
     def cerrar(self):
-        print(f'\33[K{azul} cerrando... {gris}')
+        print(f'\33[K{azul} cerrando... {negro}')
         self.driver.quit()
 
                 
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     prompt=input("pregunta: ")
     while prompt!="salir":
         respuesta=chat.chatear(prompt)
-        print(f'\33[K{amarillo}{respuesta}{gris}')
+        print(f'\33[K{amarillo}{respuesta}{negro}')
         prompt=input("pregunta: ")
     chat.cerrar()
     sys.exit()
