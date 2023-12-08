@@ -202,11 +202,9 @@ class ChatGPT:
                 else:
                     n=1
                 for y in x.contents:
-                    print(f'{rojo} de y  {y}{gris}')
                     texto = y.find("p")
                     if not texto:
                         texto=y
-                    print(f'{amarillo} de y  {y}{gris}')
 
                     if "li" in texto:
                         lista=texto.split('</li>')
@@ -222,7 +220,7 @@ class ChatGPT:
                         texto= y.find("code").text
                         salida+=f'<code>{html_tg_code(texto)}</code>\n'
                     n+=1
-                    salida+="\n\n"
+                    salida+="\n"
             elif tag=="ul":
                 texto=str(x)
                 texto=texto.replace('<ul>','').replace('</ul>','')
