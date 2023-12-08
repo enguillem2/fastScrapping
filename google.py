@@ -4,7 +4,9 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys #per pulsar tecles
 from selenium.webdriver.common.by import By
 
-from iniciar_webdriver_uc import iniciar_webdriver
+from lib.openai import ChatGPT
+from lib.iniciar_webdriver_uc import iniciar_webdriver
+
 
 from libs import *
 import os
@@ -18,7 +20,6 @@ import pickle #para guardar cookies
 import time
 import tempfile
 
-from openai import ChatGPT
 
 url="https://google.com"
 

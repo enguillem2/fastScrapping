@@ -8,26 +8,30 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.keys import Keys #per pulsar tecles
-from iniciar_webdriver_uc import iniciar_webdriver
+from lib.colors import *
+from lib.iniciar_webdriver_uc import iniciar_webdriver
+# from iniciar_webdriver_uc import iniciar_webdriver
 
 from decouple import config
-from lib.colors import *
 
 
 class ChatGPT:
-    def __init__(self,user,password):
+    def __init__(self,user,password,headless=False):
         self.OPENAI_USER=user   
         self.OPENAI_PASS=password
-        self.COOKIES_FILE=f'{tempfile.gettempdir()}/openai.cookies'
+        # self.COOKIES_FILE=f'{tempfile.gettempdir()}/openai.cookies'
+        self.COOKIES_FILE=f'lib/openai.cookies'
+
         print(f'{azul}Iniciando webdriver{negro}')
         self.driver = iniciar_webdriver(headless=False,pos="right")
         self.wait= WebDriverWait(self.driver,30)
         login = self.login_openai()
-        print()
+        print("login fet")
         if not login:
             sys.exit(1)
         
     def login_openai(self):
+        print(os.path.isfile(self.COOKIES_FILE))
 
         #login por cookies
         if os.path.isfile(self.COOKIES_FILE):
