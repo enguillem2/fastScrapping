@@ -18,7 +18,7 @@ chatGPT=ChatGPT(OPENAI_USER,OPENAI_PASS,headless=False)
 @bot.message_handler(content_types=["text"])
 def mensajes_recibidos(m):
     print(m.text)
-    respuesta=chatGPT.chatear(m.text)
+    respuesta=chatGPT.chatear(m.text,formato="html")
     bot.send_message(m.chat.id,respuesta,parse_mode="html",disable_web_page_preview=True)
 
 

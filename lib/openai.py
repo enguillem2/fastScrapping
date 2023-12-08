@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.keys import Keys #per pulsar tecles
 from lib.colors import *
 from lib.iniciar_webdriver_uc import iniciar_webdriver
+from bs4 import BeautifulSoup
+
 # from iniciar_webdriver_uc import iniciar_webdriver
 
 from decouple import config
@@ -42,10 +44,14 @@ class ChatGPT:
             for cookie in cookies:
                 try:
                     self.driver.add_cookie(cookie)
+                    print(f'{verde}cookie {cookie["name"]}{gris}')
                 except:
                     pass
-            self.driver.get("https://chat.openai.com")
+            url="https://chat.openai.com"
+            print(f'{verde}carga url {url} {gris}')
+            self.driver.get(url)
             login=self.comprobar_login()
+            # login=True
             if login:
                 print(f'\33[K{azul}LOGIN DESDE cookies: {verde}OK{negro}')
             else:
@@ -122,7 +128,7 @@ class ChatGPT:
 
         return login
     
-    def chatear(self,prompt):
+    def chatear(self,prompt,formato="string"):
         print(prompt)
         elemento=self.driver.find_element(By.CSS_SELECTOR,"textarea[tabindex='0']")
         elemento.send_keys(prompt)
@@ -153,8 +159,85 @@ class ChatGPT:
                 cursor_arriba()
                 borrar_linea()
         e = self.driver.find_elements(By.CSS_SELECTOR,"div.markdown")[-1]
-        respuesta=e.text
+        if formato=="string":
+            respuesta=e.text
+        elif formato=="html":
+            respuesta=self.formato_html()
         return respuesta
+    
+    def formato_html(self):
+        #parsearmos la pagina
+        def cambiar_etiquetas(texto):
+            texto=texto.replace('<p>','').replace('</p>','')
+            texto=texto.replace('<li>','').replace('</li>','')
+
+            texto=texto.replace('<strong>','<b>').replace('</strong>','</b>')
+            texto=texto.replace('<em>','<i>').replace('</em>','</i>')
+            texto=texto.replace('<del>','<s>').replace('</del>','</s>')
+
+
+            return texto
+        
+        def html_tg_code(texto):
+            return texto.replace('<','&lt;').replace('>','&gt;')
+
+        salida=""
+        soup=BeautifulSoup(self.driver.page_source,"html.parser")
+        respuesta = soup.find_all("div",{"class":"markdown"})[-1]
+
+        for x in respuesta.contents:
+            tag = x.name
+            if tag == "p":
+                texto=str(x)
+                texto = cambiar_etiquetas(texto)
+
+                salida+=f'{texto}\n\n'
+            elif tag=="pre":
+                texto=x.find("code").text
+                salida+=f'<code>{html_tg_code(texto)}</code>\n'
+            elif tag=="ol":
+                n=x.attrs.get("start")
+                if n:
+                    n=int(n)
+                else:
+                    n=1
+                for y in x.contents:
+                    print(f'{rojo} de y  {y}{gris}')
+                    texto = y.find("p")
+                    if not texto:
+                        texto=y
+                    print(f'{amarillo} de y  {y}{gris}')
+
+                    if "li" in texto:
+                        lista=texto.split('</li>')
+                        for item in lista:
+                            if item:
+                                texto=item.replace('<li>','')
+                                texto = cambiar_etiquetas(texto)
+                                salida+=f'- {texto}\n'
+                    
+                    salida+=f'{n}. {cambiar_etiquetas(str(texto))}\n'
+                    texto = y.find("pre")
+                    if texto:
+                        texto= y.find("code").text
+                        salida+=f'<code>{html_tg_code(texto)}</code>\n'
+                    n+=1
+                    salida+="\n\n"
+            elif tag=="ul":
+                texto=str(x)
+                texto=texto.replace('<ul>','').replace('</ul>','')
+                lista=texto.split('</li>')
+                for item in lista:
+                    if item:
+                        texto=item.replace('<li>','')
+                        texto = cambiar_etiquetas(texto)
+                        salida+=f'- {texto}\n'
+
+
+
+        return salida
+
+
     
     def cerrar(self):
         print(f'\33[K{azul} cerrando... {negro}')
