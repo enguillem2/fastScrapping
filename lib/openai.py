@@ -23,7 +23,7 @@ class ChatGPT:
         self.COOKIES_FILE=f'lib/openai.cookies'
 
         print(f'{azul}Iniciando webdriver{negro}')
-        self.driver = iniciar_webdriver(headless=False,pos="right")
+        self.driver = iniciar_webdriver(headless=headless,pos="right")
         self.wait= WebDriverWait(self.driver,30)
         login = self.login_openai()
         print("login fet")

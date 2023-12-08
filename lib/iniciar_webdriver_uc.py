@@ -14,7 +14,7 @@ def iniciar_webdriver(headless=False,pos="max"):
     driver = uc.Chrome(
         options=options,
         log_level=3,
-        headless=False
+        headless=headless
     )
 
     if not headless:
