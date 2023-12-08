@@ -15,7 +15,13 @@ bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 if __name__ == "__main__":
     print(f"{verde}hola{gris}")
-    chatGPT=ChatGPT(OPENAI_USER,OPENAI_PASS,headless=False)
+    chat=ChatGPT(OPENAI_USER,OPENAI_PASS,headless=False)
 
-    input("wait")
-
+    prompt=""
+    prompt=input("pregunta: ")
+    while prompt!="salir":
+        respuesta=chat.chatear(prompt)
+        print(f'\33[K{amarillo}{respuesta}{negro}')
+        prompt=input("pregunta: ")
+    chat.cerrar()
+    sys.exit()
